@@ -19,9 +19,27 @@ namespace EMOC20250320.AppWebMVC.Controllers
         }
 
         // GET: Brand
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string BrandName, int topRegistro = 10)
         {
-            return View(await _context.Brands.ToListAsync());
+            var query = _context.Brands.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(BrandName))
+            {
+                query = query.Where(s => s.BrandName.Contains(BrandName));
+            }
+
+            if (topRegistro > 0)
+            {
+                query = query.Take(topRegistro);
+            }
+
+           
+            var brands = await _context.Brands.ToListAsync();
+
+            
+            ViewData["BrandName"] = new SelectList(brands, "BrandId", "BrandName");
+
+            return View(await query.ToListAsync());
         }
 
         // GET: Brand/Details/5

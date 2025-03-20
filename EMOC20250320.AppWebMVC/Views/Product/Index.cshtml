@@ -57,6 +57,7 @@
         </div>
     </div>
 </form>
+
 <table class="table" id="myTable">
     <thead>
         <tr>
@@ -98,9 +99,9 @@
                     @Html.DisplayFor(modelItem => item.Brand.BrandName)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.WarehouseId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.WarehouseId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.WarehouseId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.WarehouseId" class="btn btn-primary">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.WarehouseId" class="btn btn-success" >Detalles</a> |
+                    <a asp-action="Delete" asp-route-id="@item.WarehouseId" class="btn btn-secondary">Eliminar</a>
                 </td>
             </tr>
         }

@@ -79,7 +79,7 @@ namespace EMOC20250320.AppWebMVC.Controllers
         public IActionResult Create()
         {
             ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandName");
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseName", "Notes");
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "WarehouseName");
             return View();
         }
 
@@ -97,7 +97,7 @@ namespace EMOC20250320.AppWebMVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandName", product.BrandId);
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseName", "Notes", product.WarehouseId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "WarehouseName", product.WarehouseId);
             return View(product);
         }
 
@@ -115,7 +115,7 @@ namespace EMOC20250320.AppWebMVC.Controllers
                 return NotFound();
             }
             ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandName", product.BrandId);
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseName", "Notes", product.WarehouseId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "WarehouseName", product.WarehouseId);
             return View(product);
         }
 
@@ -152,7 +152,7 @@ namespace EMOC20250320.AppWebMVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandName", product.BrandId);
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseName", "Notes", product.WarehouseId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "WarehouseName", product.WarehouseId);
             return View(product);
         }
 

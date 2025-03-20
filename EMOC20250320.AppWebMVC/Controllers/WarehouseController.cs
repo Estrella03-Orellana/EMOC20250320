@@ -19,9 +19,27 @@ namespace EMOC20250320.AppWebMVC.Controllers
         }
 
         // GET: Warehouse
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string warehouseName, int topRegistro = 10)
         {
-            return View(await _context.Warehouses.ToListAsync());
+            var query = _context.Warehouses.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(warehouseName))
+            {
+                query = query.Where(s => s.WarehouseName.Contains(warehouseName));
+            }
+
+            if (topRegistro > 0)
+            {
+                query = query.Take(topRegistro);
+            }
+
+            // Asumiendo que _context.Warehouses es tu DbSet de bodegas
+            var warehouses = await _context.Warehouses.ToListAsync();
+
+            // Usar los nombres correctos de las propiedades
+            ViewData["WarehouseName"] = new SelectList(warehouses, "WarehouseId", "WarehouseName");
+
+            return View(await query.ToListAsync());
         }
 
         // GET: Warehouse/Details/5

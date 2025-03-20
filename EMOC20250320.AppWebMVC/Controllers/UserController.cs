@@ -216,7 +216,7 @@ namespace EMOC20250320.AppWebMVC.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Perfil(int id, [Bind("Id,Nombre,Email,Estatus,Rol")] User user)
+        public async Task<IActionResult> Perfil(int id, [Bind("Id,Nombre,Email,Role")] User user)
         {
             if (id != user.UserId)
             {
