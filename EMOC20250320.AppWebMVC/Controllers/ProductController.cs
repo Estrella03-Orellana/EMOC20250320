@@ -19,11 +19,41 @@ namespace EMOC20250320.AppWebMVC.Controllers
         }
 
         // GET: Product
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Product? product, int topRegistro = 10)
         {
-            var test20250319DbContext = _context.Products.Include(p => p.Brand).Include(p => p.Warehouse);
-            return View(await test20250319DbContext.ToListAsync());
+            var query = _context.Products.AsQueryable();
+
+            if (product != null)
+            {
+                if (!string.IsNullOrWhiteSpace(product.ProductName))
+                    query = query.Where(s => s.ProductName.Contains(product.ProductName));
+                if (!string.IsNullOrWhiteSpace(product.Description))
+                    query = query.Where(s => s.Description.Contains(product.Description));
+                if (product.BrandId > 0)
+                    query = query.Where(s => s.BrandId == product.BrandId);
+                if (product.WarehouseId > 0)
+                    query = query.Where(s => s.WarehouseId == product.WarehouseId);
+            }
+
+            if (topRegistro > 0)
+                query = query.Take(topRegistro);
+
+            query = query.Include(p => p.Warehouse).Include(p => p.Brand);
+
+            // Cargar listas asegurándonos de que no sean null
+            var marcas = _context.Brands?.ToList() ?? new List<Brand>();
+            marcas.Add(new Brand { BrandName = "SELECCIONAR", BrandId = 0 });
+
+            var warehouses = _context.Warehouses?.ToList() ?? new List<Warehouse>();
+            warehouses.Add(new Warehouse { WarehouseName = "SELECCIONAR", WarehouseId = 0 });
+
+            // Usar los nombres correctos de las propiedades
+            ViewData["WarehouseId"] = new SelectList(warehouses, "WarehouseName", "Notes", 0);
+            ViewData["MarcaId"] = new SelectList(marcas, "BrandId", "BrandName", 0);
+
+            return View(await query.ToListAsync());
         }
+
 
         // GET: Product/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -48,8 +78,8 @@ namespace EMOC20250320.AppWebMVC.Controllers
         // GET: Product/Create
         public IActionResult Create()
         {
-            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId");
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "WarehouseId");
+            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandName");
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseName", "Notes");
             return View();
         }
 
@@ -66,8 +96,8 @@ namespace EMOC20250320.AppWebMVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId", product.BrandId);
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "WarehouseId", product.WarehouseId);
+            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandName", product.BrandId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseName", "Notes", product.WarehouseId);
             return View(product);
         }
 
@@ -84,8 +114,8 @@ namespace EMOC20250320.AppWebMVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId", product.BrandId);
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "WarehouseId", product.WarehouseId);
+            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandName", product.BrandId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseName", "Notes", product.WarehouseId);
             return View(product);
         }
 
@@ -121,8 +151,8 @@ namespace EMOC20250320.AppWebMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId", product.BrandId);
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "WarehouseId", product.WarehouseId);
+            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandName", product.BrandId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseName", "Notes", product.WarehouseId);
             return View(product);
         }
 
@@ -167,3 +197,4 @@ namespace EMOC20250320.AppWebMVC.Controllers
         }
     }
 }
+

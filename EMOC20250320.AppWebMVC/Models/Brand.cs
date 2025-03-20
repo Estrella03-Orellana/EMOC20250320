@@ -6,6 +6,8 @@ namespace EMOC20250320.AppWebMVC.Models;
 
 public partial class Brand
 {
+    public int BrandId { get; set; }
+
     [Display(Name = "Marca")]
     [Required(ErrorMessage = "La marca es obligatorio")]
     public string BrandName { get; set; } = null!;
